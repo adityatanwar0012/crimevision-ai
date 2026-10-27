@@ -49,7 +49,9 @@ inject_css()
 
 def _init_session():
     defaults = {
-        "groq_api_key":      os.getenv("GROQ_API_KEY", ""),
+        # Never pre-fill from the env: the widget value is sent to the browser.
+        # GroqClient falls back to GROQ_API_KEY itself when this is blank.
+        "groq_api_key":      "",
         "case_id":           generate_evidence_id("CASE"),
         "investigator":      "Det. J. Smith",
         "active_custody":    None,
@@ -93,7 +95,7 @@ with st.sidebar:
         value=st.session_state.groq_api_key,
         type="password",
         placeholder="gsk_...",
-        help="Get a free key at console.groq.com. Leave blank for demo mode.",
+        help="Get a free key at console.groq.com. Leave blank to use the server key (demo mode if none is set).",
         key="_api_key_input",
     )
     st.session_state.groq_api_key = api_key
